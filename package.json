@@ -4,7 +4,7 @@
   "description": "Freebie Dashboard for Bootstrap 5",
   "main": "pages/dashboard.html",
   "directories": {
-    "example": "root"
+    "doc": "docs"
   },
   "scripts": {
     "open-app": "gulp open-app",
@@ -37,14 +37,19 @@
     "url": "https://github.com/creativetimofficial/material-dashboard/issues"
   },
   "devDependencies": {
-    "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^7.0.1",
+    "gulp": "^5.0.0",
+    "gulp-autoprefixer": "^9.0.0",
     "gulp-clean": "^0.4.0",
     "gulp-install": "^1.1.0",
+    "gulp-open": "^3.0.1",
     "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^2.6.5",
-    "gulp-open": "^3.0.1",
     "sass": "^1.49.9"
   },
-  "homepage": "http://creative-tim.com/product/material-dashboard"
+  "homepage": "http://creative-tim.com/product/material-dashboard",
+  "dependencies": {
+    "@netlify/functions": "^2.8.1",
+    "google-auth-library": "^9.13.0",
+    "googleapis": "^140.0.1"
+  }
 }
