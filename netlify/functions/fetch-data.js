@@ -4,7 +4,7 @@ const { withStatusCode } = require('@netlify/functions');
 exports.handler = async (event, context) => {
     try {
         // Parse the JSON key from the environment variable
-        const key = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
+        const key = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
         const sheets = google.sheets('v4');
 
