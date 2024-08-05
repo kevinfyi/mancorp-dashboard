@@ -19,7 +19,7 @@ exports.handler = async (event, context) => {
 
         // Get the data from Google Sheets
         const spreadsheetId = '1TZHLzn02cE_WnkzZSnvEvZcpBWVP5Atx9l4x4jopPho'; 
-        const range = 'Sheet1!A:C'; 
+        const range = 'Sheet1!K:M'; 
         const response = await sheets.spreadsheets.values.get({
             auth: client,
             spreadsheetId,
