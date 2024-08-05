@@ -18,8 +18,8 @@ exports.handler = async (event, context) => {
         const client = await auth.getClient();
 
         // Get the data from Google Sheets
-        const spreadsheetId = 'your-spreadsheet-id';
-        const range = 'Sheet1!A:C';
+        const spreadsheetId = '1TZHLzn02cE_WnkzZSnvEvZcpBWVP5Atx9l4x4jopPho'; 
+        const range = 'Sheet1!A:C'; 
         const response = await sheets.spreadsheets.values.get({
             auth: client,
             spreadsheetId,
@@ -46,6 +46,3 @@ exports.handler = async (event, context) => {
         };
     }
 };
-
-
-
