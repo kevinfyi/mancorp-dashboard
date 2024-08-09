@@ -1,14 +1,9 @@
 const { google } = require('googleapis');
 
 exports.handler = async (event, context) => {
-    // Only allow POST requests
-    if (event.httpMethod !== 'POST') {
-        return { statusCode: 405, body: 'Method Not Allowed' };
-    }
-
     try {
-        // Parse the form data
-        const formData = JSON.parse(event.body);
+        // Log the environment variable to ensure it is loaded correctly
+        console.log('GOOGLE_APPLICATION_CREDENTIALS:', process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
         // Parse the credentials
         const key = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
@@ -25,26 +20,32 @@ exports.handler = async (event, context) => {
         // Get the authenticated client
         const client = await auth.getClient();
 
-        const spreadsheetId = '1TZHLzn02cE_WnkzZSnvEvZcpBWVP5Atx9l4x4jopPho';
-        const range = 'Processed Cleaning Jobs!A:C'; // Adjust this range as needed
+        // Get the form data from the request body
+        const formData = JSON.parse(event.body);
 
-        // Prepare the values to be inserted
+        // Prepare the data to append (adjust according to your form fields)
         const values = [
             [formData.selectLarge, formData.selectSmall, formData.inputField]
         ];
 
-        // Append the data to the sheet
-        const response = await sheets.spreadsheets.values.append({
+        // Define the spreadsheetId and range
+        const spreadsheetId = '1TZHLzn02cE_WnkzZSnvEvZcpBWVP5Atx9l4x4jopPho';
+        const range = 'Processed Cleaning Jobs!A1'; // Adjust this range according to your needs
+
+        // Append the new row
+        await sheets.spreadsheets.values.append({
             auth: client,
             spreadsheetId,
             range,
-            valueInputOption: 'USER_ENTERED',
-            resource: { values },
+            valueInputOption: 'RAW',
+            resource: {
+                values,
+            },
         });
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ message: 'Form submitted successfully' }),
+            body: JSON.stringify({ message: 'Form submitted successfully!' }),
         };
     } catch (error) {
         console.error('Error occurred:', error);
