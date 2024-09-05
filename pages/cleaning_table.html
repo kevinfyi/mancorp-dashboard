@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleaning Table</title>
+    <style>
+        /* Add your CSS styles here */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cleaning Table</h1>
+    <table id="cleaningTable">
+        <thead>
+            <tr>
+                <th>Column A</th>
+                <th>Column B</th>
+                <th>Column C</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Fetch data from Google Sheet and populate the table
+        async function fetchCleaningData() {
+            try {
+                const response = await fetch('/.netlify/functions/fetch-cleaning-data');
+                const data = await response.json();
+
+                const tableBody = document.getElementById('cleaningTable').getElementsByTagName('tbody')[0];
+
+                data.rows.forEach((row, index) => {
+                    let newRow = tableBody.insertRow();
+
+                    row.forEach(cellData => {
+                        let newCell = newRow.insertCell();
+                        newCell.appendChild(document.createTextNode(cellData));
+                    });
+
+                    // Add Update and Delete buttons
+                    let updateCell = newRow.insertCell();
+                    let updateButton = document.createElement('button');
+                    updateButton.textContent = 'Update';
+                    updateButton.onclick = () => editRow(index + 1); // +1 to account for the header row
+                    updateCell.appendChild(updateButton);
+
+                    let deleteCell = newRow.insertCell();
+                    let deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.onclick = () => deleteRow(index + 1); // +1 to account for the header row
+                    deleteCell.appendChild(deleteButton);
+                });
+            } catch (error) {
+                console.error('Error fetching cleaning data:', error);
+            }
+        }
+
+        // Call the function when the page loads
+        window.onload = fetchCleaningData;
+    </script>
+
+    <script>
+        // Function to edit a row
+        function editRow(index) {
+            const row = document.querySelectorAll('#cleaningTable tr')[index];
+            const id = row.children[0].innerText;
+            const largeSelect = prompt("Enter new value for Large Select", row.children[1].innerText);
+            const smallSelect = prompt("Enter new value for Small Select", row.children[2].innerText);
+
+            fetch('/.netlify/functions/update-cleaning-data', { // Ensure this points to the correct update endpoint
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    ID: id,
+                    LargeSelect: largeSelect,
+                    SmallSelect: smallSelect
+                })
+            }).then(response => {
+                if (response.ok) {
+                    alert('Row updated successfully!');
+                    location.reload(); // Reload the page to see the updated data
+                } else {
+                    alert('Row update failed.');
+                }
+            });
+        }
+
+        // Function to delete a row
+        function deleteRow(index) {
+            const row = document.querySelectorAll('#cleaningTable tr')[index];
+            const id = row.children[0].innerText;
+
+            fetch('/.netlify/functions/delete-cleaning-data', { // Ensure this points to the correct delete endpoint
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ ID: id })
+            }).then(response => {
+                if (response.ok) {
+                    alert('Row deleted successfully!');
+                    location.reload(); // Reload the page to see the updated data
+                } else {
+                    alert('Row deletion failed.');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

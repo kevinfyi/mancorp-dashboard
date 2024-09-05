@@ -1,12 +1,11 @@
-[build]
-  functions = "netlify/functions"
-
 [functions]
-  directory = "functions"
-  [functions.environment]
-    GOOGLE_APPLICATION_CREDENTIALS = "$GOOGLE_APPLICATION_CREDENTIALS"
+  directory = "netlify/functions"
 
+[functions.environment]
+  GOOGLE_APPLICATION_CREDENTIALS = "$GOOGLE_APPLICATION_CREDENTIALS"
+
+# rule to handle 404s
 [[redirects]]
   from = "/*"
-  to = "/index.html"
-  status = 200
+  to = "/404.html"
+  status = 404
