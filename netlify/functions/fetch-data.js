@@ -31,7 +31,7 @@ exports.handler = async (event, context) => {
       'Dashboard!M8',
       'Dashboard!B2:H2',
       'Dashboard!B3:H3',
-      'Dashboard!N5:Y5'
+      'Dashboard!N5:Y5',
     ];
 
     const key = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
